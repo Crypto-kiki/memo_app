@@ -25,8 +25,11 @@ public class MemoController {
 
     @GetMapping("/edit/{id}")
     public String editForm(
-            @PathVariable int id
+            @PathVariable int id,
+            Model model
     ) {
+        model.addAttribute("memo", memoRepository.findById(id));
+
         return "memo-edit";
     }
 
@@ -36,6 +39,17 @@ public class MemoController {
             @RequestParam String content
     ) {
         memoRepository.save(title, content);
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/edit")
+    public String editMemo(
+            @RequestParam int id,
+            @RequestParam String title,
+            @RequestParam String content
+    ) {
+        memoRepository.update(id, title, content);
 
         return "redirect:/";
     }
